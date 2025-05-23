@@ -11,41 +11,44 @@ class CalculadoraNotas:
     def __init__(self, root):
         self.root = root
         self.root.title("Calculadora de Notas Escolares - Edwin Gil")
-        self.root.geometry("400x350")
-        self.root.configure(bg="#f5f6fa")
+        self.root.geometry("420x370")
+        self.root.configure(bg="#222f3e")  # Fondo oscuro para mejor contraste
         self.num_preguntas = None
+        self.resultado_label = None
         self.setup_main_ui()
 
     def setup_main_ui(self):
         for widget in self.root.winfo_children():
             widget.destroy()
         self.label_info = tk.Label(self.root, text="Configure el número de preguntas antes de calcular la nota.",
-                                   font=("Segoe UI", 14, "bold"), bg="#f5f6fa", fg="#273c75")
+                                   font=("Segoe UI", 15, "bold"), bg="#222f3e", fg="#feca57")
         self.label_info.pack(pady=18)
         self.btn_config = tk.Button(self.root, text="Configurar número de preguntas", command=self.setup_num_preguntas,
-                                    font=("Segoe UI", 12), bg="#00a8ff", fg="white", activebackground="#0097e6", relief="flat", cursor="hand2")
+                                    font=("Segoe UI", 13, "bold"), bg="#54a0ff", fg="white", activebackground="#2e86de", relief="flat", cursor="hand2")
         self.btn_config.pack(pady=8)
         self.label_preguntas = tk.Label(self.root, text="Número de preguntas: No configurado",
-                                        font=("Segoe UI", 12), bg="#f5f6fa", fg="#353b48")
+                                        font=("Segoe UI", 13, "bold"), bg="#222f3e", fg="#feca57")
         self.label_preguntas.pack(pady=6)
         self.label_aciertos = tk.Label(self.root, text="Ingrese el número de respuestas correctas:",
-                                      font=("Segoe UI", 13), bg="#f5f6fa", fg="#353b48")
+                                      font=("Segoe UI", 14, "bold"), bg="#222f3e", fg="#feca57")
         self.label_aciertos.pack(pady=14)
-        self.entry_aciertos = tk.Entry(self.root, font=("Segoe UI", 16), width=8, justify="center", bg="#dff9fb", relief="flat")
+        self.entry_aciertos = tk.Entry(self.root, font=("Segoe UI", 18, "bold"), width=8, justify="center", bg="#f1f2f6", fg="#222f3e", relief="flat")
         self.entry_aciertos.pack(pady=6)
         self.btn_calcular = tk.Button(self.root, text="Calcular Nota", command=self.calcular_nota,
-                                      font=("Segoe UI", 13, "bold"), bg="#44bd32", fg="white", activebackground="#4cd137", relief="flat", cursor="hand2")
+                                      font=("Segoe UI", 15, "bold"), bg="#1dd1a1", fg="white", activebackground="#10ac84", relief="flat", cursor="hand2")
         self.btn_calcular.pack(pady=16)
+        self.resultado_label = tk.Label(self.root, text="", font=("Segoe UI", 38, "bold"), bg="#222f3e", fg="#ff6b6b")
+        self.resultado_label.pack(pady=10)
         self.update_estado_preguntas()
 
     def setup_num_preguntas(self):
         top = tk.Toplevel(self.root)
         top.title("Configurar número de preguntas")
-        top.geometry("320x150")
-        top.configure(bg="#f5f6fa")
+        top.geometry("340x160")
+        top.configure(bg="#222f3e")
         tk.Label(top, text="Ingrese el número de preguntas del examen:",
-                 font=("Segoe UI", 12, "bold"), bg="#f5f6fa", fg="#273c75").pack(pady=12)
-        entry = tk.Entry(top, font=("Segoe UI", 15), width=8, justify="center", bg="#dff9fb", relief="flat")
+                 font=("Segoe UI", 13, "bold"), bg="#222f3e", fg="#feca57").pack(pady=12)
+        entry = tk.Entry(top, font=("Segoe UI", 16, "bold"), width=8, justify="center", bg="#f1f2f6", fg="#222f3e", relief="flat")
         entry.pack(pady=5)
         def guardar():
             try:
@@ -58,7 +61,7 @@ class CalculadoraNotas:
             except ValueError:
                 messagebox.showerror("Error", "Por favor, ingrese un número válido de preguntas.")
         tk.Button(top, text="Guardar", command=guardar,
-                  font=("Segoe UI", 12, "bold"), bg="#00a8ff", fg="white", activebackground="#0097e6", relief="flat", cursor="hand2").pack(pady=10)
+                  font=("Segoe UI", 13, "bold"), bg="#54a0ff", fg="white", activebackground="#2e86de", relief="flat", cursor="hand2").pack(pady=10)
 
     def update_estado_preguntas(self):
         if self.num_preguntas:
@@ -75,8 +78,11 @@ class CalculadoraNotas:
             if not (0 <= aciertos <= self.num_preguntas):
                 raise ValueError
             nota = (aciertos / self.num_preguntas) * 5.0
-            messagebox.showinfo("Resultado", f"La calificación es: {nota:.2f}")
+            nota_redondeada = round(nota + 0.05, 1)  # Redondeo hacia arriba a la décima más cercana
+            self.resultado_label.config(text=f"{nota_redondeada}")
+            messagebox.showinfo("Resultado", f"La calificación es: {nota_redondeada}")
         except ValueError:
+            self.resultado_label.config(text="")
             messagebox.showerror("Error", f"Ingrese un número de aciertos válido (0 a {self.num_preguntas}).")
 
 if __name__ == "__main__":
