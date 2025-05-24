@@ -38,9 +38,12 @@ class CalculadoraNotas:
             fg="white",
             activebackground="#357ae8",
             activeforeground="white",
-            relief="flat",
+            relief="groove",
             cursor="hand2",
-            bd=0
+            bd=2,
+            highlightbackground="#4f8cff",
+            highlightcolor="#357ae8",
+            highlightthickness=2
         )
         self.btn_config.pack(pady=18)
         # Etiquetas para mostrar la materia, curso y número de preguntas configurados
@@ -74,6 +77,7 @@ class CalculadoraNotas:
             highlightthickness=1
         )
         self.entry_aciertos.pack(pady=6)
+        self.entry_aciertos.bind('<Return>', lambda event: self.calcular_nota())
         # Botón para calcular la nota
         self.btn_calcular = tk.Button(
             self.root,
@@ -84,9 +88,12 @@ class CalculadoraNotas:
             fg="white",
             activebackground="#00a383",
             activeforeground="white",
-            relief="flat",
+            relief="groove",
             cursor="hand2",
-            bd=0
+            bd=2,
+            highlightbackground="#00b894",
+            highlightcolor="#00a383",
+            highlightthickness=2
         )
         self.btn_calcular.pack(pady=16)
         # Etiqueta para mostrar el resultado de la nota en grande
@@ -135,7 +142,10 @@ class CalculadoraNotas:
             except ValueError:
                 messagebox.showerror("Error", "Por favor, complete todos los campos correctamente.")
         tk.Button(top, text="Guardar", command=guardar,
-                  font=("Segoe UI", 13, "bold"), bg="#4f8cff", fg="white", activebackground="#357ae8", relief="flat", cursor="hand2", bd=0).pack(pady=14)
+                  font=("Segoe UI", 13, "bold"), bg="#4f8cff", fg="white", activebackground="#357ae8", relief="groove", cursor="hand2", bd=2, highlightbackground="#4f8cff", highlightcolor="#357ae8", highlightthickness=2).pack(pady=14)
+        entry_preguntas.bind('<Return>', lambda event: guardar())
+        entry_curso.bind('<Return>', lambda event: entry_preguntas.focus())
+        entry_materia.bind('<Return>', lambda event: entry_curso.focus())
 
     def update_estado_configuracion(self):
         # Actualiza las etiquetas de materia, curso y número de preguntas en la interfaz principal
